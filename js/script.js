@@ -33,11 +33,12 @@ function loadWeather(URL) {
 function getWeather(currentCity) {
     console.log(myArr[currentCity]);
         //Dom elements to update and change
+        let today = new Date().toLocaleDateString()
         city.innerText = myArr[currentCity].name
         low.innerText = myArr[currentCity].main.temp_min + '°';
         high.innerText = myArr[currentCity].main.temp_max + '°';
         description.innerText = myArr[currentCity].weather[0].description;
-        //date.innerText = today;    
+        date.innerText = today;    
 }
 
 add.addEventListener('click', function (e) {
@@ -48,11 +49,13 @@ add.addEventListener('click', function (e) {
     let url_imperial = "&units=imperial"
     let url_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
     let fullURL = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
-
     loadWeather(fullURL);
 
 });
 
+next.addEventListener('click', function(e){
+    
+});
 /* async function getWeather() {
     const response = await fetch(api_url_f);
     const data = await response.json();

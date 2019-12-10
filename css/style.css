@@ -12,3 +12,9 @@ h1{
     -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
   }
+.flipArrow{
+    transition: transform 0.8s;
+}
+.flipArrow:hover{
+    transform: rotateX(360deg);
+}
