@@ -1,0 +1,14 @@
+h1{
+    background-color: #E1F25F;
+    color: #96008B;
+    font-family: Helvetica, sans-serif;
+    font-size: 50pt;
+}
+.spinArrow {
+    -webkit-transition: -webkit-transform .8s ease-in-out;
+            transition:         transform .8s ease-in-out;
+  }
+.spinArrow:hover{
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
