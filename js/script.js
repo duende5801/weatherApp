@@ -1,4 +1,5 @@
-//grab dom elements
+//---------------grab dom elements--------------------//
+
 //city, low, high, description, date, delete, user-input, add
 let city = document.getElementById('city');
 let low = document.getElementById('low');
@@ -8,38 +9,46 @@ let date = document.getElementById('date');
 let del = document.getElementById('delete');
 let add = document.getElementById('add');
 let user_input = document.getElementById('user-input');
+let wIcon = document.getElementById('wIcon');
+let next = document.getElementById('next');
+let prev = document.getElementById('prev');
+let today = new Date().toLocaleDateString()
 
-let myArr = [];
+//--------------global variables-------------------//
+let cityWeather = [];
+let counter = 0;
 
-let counter =0;
 //---------Load Your JSON Weather File--------//
 
 function loadWeather(URL) {
     let xmlhttp = new XMLHttpRequest();
     //Put your weather API URL and KEY here
     //let url = "";
-
     xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            let cityWeather = JSON.parse(this.responseText);
-            myArr.push(cityWeather);
-            getWeather(myArr.indexOf(cityWeather));
+            let myArr = JSON.parse(this.responseText);
+            cityWeather.push(myArr);
+            getWeather(cityWeather.indexOf(myArr));
         }
     };
     xmlhttp.open("GET", URL, true);
     xmlhttp.send();
 }
 
+//-----------PARSEing out the respective city's info for front end/DOM manipulation--------------//
 function getWeather(currentCity) {
-    console.log(myArr[currentCity]);
-        //Dom elements to update and change
-        let today = new Date().toLocaleDateString()
-        city.innerText = myArr[currentCity].name
-        low.innerText = myArr[currentCity].main.temp_min + '°';
-        high.innerText = myArr[currentCity].main.temp_max + '°';
-        description.innerText = myArr[currentCity].weather[0].description;
-        date.innerText = today;    
+    console.log(cityWeather[currentCity]);
+    //Dom elements to update and change
+    city.innerText = cityWeather[currentCity].name
+    low.innerText = cityWeather[currentCity].main.temp_min + '°';
+    high.innerText = cityWeather[currentCity].main.temp_max + '°';
+    description.innerText = cityWeather[currentCity].weather[0].description;
+    wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityWeather[currentCity].weather[0].icon + '@2x.png');
+    date.innerText = today;
+    counter = currentCity;
 }
+
+//-----------------Add event listeners-------------------//
 
 add.addEventListener('click', function (e) {
     //building a url
@@ -48,17 +57,44 @@ add.addEventListener('click', function (e) {
     let url_city_pt2 = user_input.value;
     let url_imperial = "&units=imperial"
     let url_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
-    let fullURL = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
-    loadWeather(fullURL);
-
+    let api_url = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
+    loadWeather(api_url);
+});
+del.addEventListener('click', function (e) {
+    cityWeather.splice(cityWeather.indexOf(counter), 1);
+    city.innerText = '';
+    low.innerText = '';
+    high.innerText = '';
+    description.innerText = '';
+    wIcon.setAttribute('src', '');
+    date.innerText = '';
+});
+next.addEventListener('click', function (e) {
+    if (cityWeather.length > 0) {
+        if (counter < cityWeather.length - 1) counter++;
+        else counter = 0;
+        getWeather(counter);
+    }
+});
+prev.addEventListener('click', function (e) {
+    if (cityWeather.length > 0) {
+        if (counter > 0) counter--;
+        else counter = cityWeather.length - 1;
+        getWeather(counter);
+    }
 });
 
-next.addEventListener('click', function(e){
-    
-});
+//----------THIS FUNCTION DOES THE REQEST/SEND AND DOM MANIPULATION ALL IN ONE
+//----------THIS FUNCTION WORKS REALLY WELL WITH ONE SINGLE API URL
+//----------WOULD BE USEFUL IF IN THE APP, WE USED GEOLOCATER AND
+//----------GRABBED USER'S CURRENT LOCATION. ONCE MORE URL'S ARE INTRODUCED
+//----------SOMETHING GETS SCREWED UP. UNLESS I JUST DID SOMETHING WRONG AND
+//----------GAVE UP TOO QUICK.
+
 /* async function getWeather() {
-    const response = await fetch(api_url_f);
+    const response = await fetch(api_url);
     const data = await response.json();
+
     let today = new Date().toLocaleDateString()
 
     //Dom elements to update and change

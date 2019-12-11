@@ -4,17 +4,16 @@ h1{
     font-family: Helvetica, sans-serif;
     font-size: 50pt;
 }
-.spinArrow {
-    -webkit-transition: -webkit-transform .8s ease-in-out;
-            transition:         transform .8s ease-in-out;
-  }
-.spinArrow:hover{
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-.flipArrow{
-    transition: transform 0.8s;
+body{
+    background-color: darkgrey;
 }
-.flipArrow:hover{
-    transform: rotateX(360deg);
+.make-prev{
+    transform: scaleX(-1);
+}
+.icon-height{
+    width: 280px;
+}
+a{
+    color: darkgrey;
+    text-decoration: none;
 }
