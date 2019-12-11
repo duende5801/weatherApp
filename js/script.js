@@ -13,6 +13,16 @@ let user_input = document.getElementById('user-input');
 let wIcon = document.getElementById('wIcon');
 let next = document.getElementById('next');
 let prev = document.getElementById('prev');
+let day1temp = document.getElementById('day1temp');
+let day2temp = document.getElementById('day2temp');
+let day3temp = document.getElementById('day3temp');
+let day4temp = document.getElementById('day4temp');
+let day5temp = document.getElementById('day5temp');
+let day1icon = document.getElementById('day1icon');
+let day2icon = document.getElementById('day2icon');
+let day3icon = document.getElementById('day3icon');
+let day4icon = document.getElementById('day4icon');
+let day5icon = document.getElementById('day5icon');
 let today = new Date().toLocaleDateString()
 
 //--------------global variables-------------------//
@@ -22,7 +32,8 @@ let counter = 0;
 
 //-------------on load---------------------------//
 if(localStorage.getItem('savedCities')){
-    cityWeather = JSON.parse(localStorage.getItem('savedCities'))
+    cityWeather = JSON.parse(localStorage.getItem('savedCities'));
+    cityForcast = JSON.parse(localStorage.getItem('savedForcast'));
 }
 
 //------------------------------Load Your JSON Weather File--------------------------//
@@ -63,6 +74,7 @@ user_input.addEventListener('keypress', function (e) {
 });
 del.addEventListener('click', function (e) {
     cityWeather.splice(cityWeather.indexOf(counter), 1);
+    cityForcast.splice(cityForcast.indexOf(counter), 1);
     saveData();
     if(cityWeather.length>0){
         prevCity();
@@ -75,6 +87,17 @@ del.addEventListener('click', function (e) {
         description.innerText = '';
         wIcon.setAttribute('src', '');
         date.innerText = '';
+        day1temp.innerText = '';
+        day1icon.setAttribute('src', '');
+        day2temp.innerText = '';
+        day2icon.setAttribute('src', '');
+        day3temp.innerText = '';
+        day3icon.setAttribute('src', '');
+        day4temp.innerText = '';
+        day4icon.setAttribute('src', '');
+        day5temp.innerText = '';
+        day5icon.setAttribute('src', '');
+    
     }
 });
 next.addEventListener('click', nextCity)
@@ -95,7 +118,7 @@ function buildURL(){
     let for_imperial = "&units=imperial";
     let for_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
     let for_url = for_pt1+for_city_pt2+for_imperial+for_key_pt3;
-    loadWeather(for_url);
+    loadForecast(for_url);
     user_input.value =''
 }
 //-----------PARSEing out the respective city's info for front end/DOM manipulation--------------//
@@ -115,20 +138,29 @@ function getWeather(currentCity) {
 function getForcast(currentCity) {
     console.log(cityWeather[currentCity]);
     //Dom elements to update and change
-    low.innerText = 'low ' + cityForcast[currentCity].list[0].main.temp_min + '°';
-    high.innerText = 'high ' + cityForcast[currentCity].list[0].main.temp_max + '°';
-    wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[0].weather[0].icon + '@2x.png');
+    day1temp.innerText = 'low ' + cityForcast[currentCity].list[0].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[0].main.temp_max + '°';
+    day1icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[0].weather[0].icon + '@2x.png');
+    day2temp.innerText = 'low ' + cityForcast[currentCity].list[7].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[7].main.temp_max + '°';
+    day2icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[7].weather[0].icon + '@2x.png');
+    day3temp.innerText = 'low ' + cityForcast[currentCity].list[15].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[15].main.temp_max + '°';
+    day3icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[15].weather[0].icon + '@2x.png');
+    day4temp.innerText = 'low ' + cityForcast[currentCity].list[23].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[23].main.temp_max + '°';
+    day4icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[23].weather[0].icon + '@2x.png');
+    day5temp.innerText = 'low ' + cityForcast[currentCity].list[31].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[31].main.temp_max + '°';
+    day5icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[31].weather[0].icon + '@2x.png');
     counter = currentCity;
     saveData();
 }
 function saveData(){
     localStorage.setItem('savedCities', JSON.stringify(cityWeather));
+    localStorage.setItem('savedForcast', JSON.stringify(cityForcast));
 }
 function prevCity(){
     if (cityWeather.length > 0) {
         if (counter > 0) counter--;
         else counter = cityWeather.length - 1;
         getWeather(counter);
+        getForcast(counter);
     }
 }
 function nextCity(){
@@ -136,6 +168,7 @@ function nextCity(){
         if (counter < cityWeather.length - 1) counter++;
         else counter = 0;
         getWeather(counter);
+        getForcast(counter);
     }
 }
 
