@@ -1,7 +1,8 @@
 //---------------grab dom elements--------------------//
 
-//city, low, high, description, date, delete, user-input, add
+//city, current-temp, low, high, description, date, delete, user-input, add
 let city = document.getElementById('city');
+let curTemp = document.getElementById('current-temp');
 let low = document.getElementById('low');
 let high = document.getElementById('high');
 let description = document.getElementById('description');
@@ -16,6 +17,7 @@ let today = new Date().toLocaleDateString()
 
 //--------------global variables-------------------//
 let cityWeather = [];
+let cityForcast = [];
 let counter = 0;
 
 //-------------on load---------------------------//
@@ -23,7 +25,7 @@ if(localStorage.getItem('savedCities')){
     cityWeather = JSON.parse(localStorage.getItem('savedCities'))
 }
 
-//---------Load Your JSON Weather File--------//
+//------------------------------Load Your JSON Weather File--------------------------//
 function loadWeather(URL) {
     let xmlhttp = new XMLHttpRequest();
     //Put your weather API URL and KEY here
@@ -38,24 +40,36 @@ function loadWeather(URL) {
     xmlhttp.open("GET", URL, true);
     xmlhttp.send();
 }
+function loadForecast(URL) {
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let myArr = JSON.parse(this.responseText);
+            cityForcast.push(myArr);
+            getForcast(cityForcast.indexOf(myArr));
+        }
+    };
+    xmlhttp.open("GET", URL, true);
+    xmlhttp.send();
+}
 
 //-----------------Add event listeners-------------------//
 add.addEventListener('click', buildURL)
 
 user_input.addEventListener('keypress', function (e) {
-    if (e.keycode === 13) {
-        console.log('this key is being hit');
+    if (e.keyCode === 13) {
         buildURL();
-        //saveData();
     }
 });
 del.addEventListener('click', function (e) {
     cityWeather.splice(cityWeather.indexOf(counter), 1);
+    saveData();
     if(cityWeather.length>0){
         prevCity();
     }
     else{
         city.innerText = '';
+        curTemp.innerText = '';
         low.innerText = '';
         high.innerText = '';
         description.innerText = '';
@@ -67,27 +81,43 @@ next.addEventListener('click', nextCity)
 prev.addEventListener('click', prevCity)
 
 
-//----------------------------------REPETITVE FUNCTIONS----------------------------------------//
+//----------------------------------------REPETITVE FUNCTIONS-----------------------------------------------//
 
 function buildURL(){
     let url_pt1 = "http://api.openweathermap.org/data/2.5/weather?q=";
     let url_city_pt2 = user_input.value;
-    let url_imperial = "&units=imperial"
+    let url_imperial = "&units=imperial";
     let url_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
     let api_url = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
     loadWeather(api_url);
+    let for_pt1 = "http://api.openweathermap.org/data/2.5/forecast?q=";
+    let for_city_pt2 = user_input.value;
+    let for_imperial = "&units=imperial";
+    let for_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
+    let for_url = for_pt1+for_city_pt2+for_imperial+for_key_pt3;
+    loadWeather(for_url);
     user_input.value =''
 }
 //-----------PARSEing out the respective city's info for front end/DOM manipulation--------------//
 function getWeather(currentCity) {
     console.log(cityWeather[currentCity]);
     //Dom elements to update and change
-    city.innerText = cityWeather[currentCity].name
-    low.innerText = cityWeather[currentCity].main.temp_min + '°';
-    high.innerText = cityWeather[currentCity].main.temp_max + '°';
+    city.innerText = cityWeather[currentCity].name;
+    curTemp.innerText = cityWeather[currentCity].main.temp;
+    low.innerText = 'low ' + cityWeather[currentCity].main.temp_min + '°';
+    high.innerText = 'high ' + cityWeather[currentCity].main.temp_max + '°';
     description.innerText = cityWeather[currentCity].weather[0].description;
     wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityWeather[currentCity].weather[0].icon + '@2x.png');
     date.innerText = today;
+    counter = currentCity;
+    saveData();
+}
+function getForcast(currentCity) {
+    console.log(cityWeather[currentCity]);
+    //Dom elements to update and change
+    low.innerText = 'low ' + cityForcast[currentCity].list[0].main.temp_min + '°';
+    high.innerText = 'high ' + cityForcast[currentCity].list[0].main.temp_max + '°';
+    wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[0].weather[0].icon + '@2x.png');
     counter = currentCity;
     saveData();
 }
