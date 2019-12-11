@@ -18,8 +18,12 @@ let today = new Date().toLocaleDateString()
 let cityWeather = [];
 let counter = 0;
 
-//---------Load Your JSON Weather File--------//
+//-------------on load---------------------------//
+if(localStorage.getItem('savedCities')){
+    cityWeather = JSON.parse(localStorage.getItem('savedCities'))
+}
 
+//---------Load Your JSON Weather File--------//
 function loadWeather(URL) {
     let xmlhttp = new XMLHttpRequest();
     //Put your weather API URL and KEY here
@@ -35,6 +39,45 @@ function loadWeather(URL) {
     xmlhttp.send();
 }
 
+//-----------------Add event listeners-------------------//
+add.addEventListener('click', buildURL)
+
+user_input.addEventListener('keypress', function (e) {
+    if (e.keycode === 13) {
+        console.log('this key is being hit');
+        buildURL();
+        //saveData();
+    }
+});
+del.addEventListener('click', function (e) {
+    cityWeather.splice(cityWeather.indexOf(counter), 1);
+    if(cityWeather.length>0){
+        prevCity();
+    }
+    else{
+        city.innerText = '';
+        low.innerText = '';
+        high.innerText = '';
+        description.innerText = '';
+        wIcon.setAttribute('src', '');
+        date.innerText = '';
+    }
+});
+next.addEventListener('click', nextCity)
+prev.addEventListener('click', prevCity)
+
+
+//----------------------------------REPETITVE FUNCTIONS----------------------------------------//
+
+function buildURL(){
+    let url_pt1 = "http://api.openweathermap.org/data/2.5/weather?q=";
+    let url_city_pt2 = user_input.value;
+    let url_imperial = "&units=imperial"
+    let url_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
+    let api_url = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
+    loadWeather(api_url);
+    user_input.value =''
+}
 //-----------PARSEing out the respective city's info for front end/DOM manipulation--------------//
 function getWeather(currentCity) {
     console.log(cityWeather[currentCity]);
@@ -46,43 +89,26 @@ function getWeather(currentCity) {
     wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityWeather[currentCity].weather[0].icon + '@2x.png');
     date.innerText = today;
     counter = currentCity;
+    saveData();
 }
-
-//-----------------Add event listeners-------------------//
-
-add.addEventListener('click', function (e) {
-    //building a url
-    //urls Concatenate
-    let url_pt1 = "http://api.openweathermap.org/data/2.5/weather?q=";
-    let url_city_pt2 = user_input.value;
-    let url_imperial = "&units=imperial"
-    let url_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
-    let api_url = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
-    loadWeather(api_url);
-});
-del.addEventListener('click', function (e) {
-    cityWeather.splice(cityWeather.indexOf(counter), 1);
-    city.innerText = '';
-    low.innerText = '';
-    high.innerText = '';
-    description.innerText = '';
-    wIcon.setAttribute('src', '');
-    date.innerText = '';
-});
-next.addEventListener('click', function (e) {
-    if (cityWeather.length > 0) {
-        if (counter < cityWeather.length - 1) counter++;
-        else counter = 0;
-        getWeather(counter);
-    }
-});
-prev.addEventListener('click', function (e) {
+function saveData(){
+    localStorage.setItem('savedCities', JSON.stringify(cityWeather));
+}
+function prevCity(){
     if (cityWeather.length > 0) {
         if (counter > 0) counter--;
         else counter = cityWeather.length - 1;
         getWeather(counter);
     }
-});
+}
+function nextCity(){
+    if (cityWeather.length > 0) {
+        if (counter < cityWeather.length - 1) counter++;
+        else counter = 0;
+        getWeather(counter);
+    }
+}
+
 
 //----------THIS FUNCTION DOES THE REQEST/SEND AND DOM MANIPULATION ALL IN ONE
 //----------THIS FUNCTION WORKS REALLY WELL WITH ONE SINGLE API URL

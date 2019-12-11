@@ -8,7 +8,7 @@ body{
     background-color: darkgrey;
 }
 .make-prev{
-    transform: scaleX(-1);
+    transform: scale(-1);
 }
 .icon-height{
     width: 280px;
@@ -16,4 +16,16 @@ body{
 a{
     color: darkgrey;
     text-decoration: none;
+}
+.arrow{
+    transition: .8s;
+}
+.arrow:hover{
+    transform: scale(2);
+}
+.arrow2{
+    transition: .8s;
+}
+.arrow2:hover{
+    transform: scale(-2);
 }
