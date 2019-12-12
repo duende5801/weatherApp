@@ -29,9 +29,12 @@ let today = new Date().toLocaleDateString()
 let cityWeather = [];
 let cityForcast = [];
 let counter = 0;
+let check;
+let user;
+let dup = true;
 
 //-------------on load---------------------------//
-if(localStorage.getItem('savedCities')){
+if (localStorage.getItem('savedCities')) {
     cityWeather = JSON.parse(localStorage.getItem('savedCities'));
     cityForcast = JSON.parse(localStorage.getItem('savedForcast'));
 }
@@ -65,21 +68,20 @@ function loadForecast(URL) {
 }
 
 //-----------------Add event listeners-------------------//
-add.addEventListener('click', buildURL)
-
+add.addEventListener('click', findDup);
 user_input.addEventListener('keypress', function (e) {
     if (e.keyCode === 13) {
-        buildURL();
+        findDup();
     }
 });
 del.addEventListener('click', function (e) {
     cityWeather.splice(cityWeather.indexOf(counter), 1);
     cityForcast.splice(cityForcast.indexOf(counter), 1);
     saveData();
-    if(cityWeather.length>0){
+    if (cityWeather.length > 0) {
         prevCity();
     }
-    else{
+    else {
         city.innerText = '';
         curTemp.innerText = '';
         low.innerText = '';
@@ -88,16 +90,16 @@ del.addEventListener('click', function (e) {
         wIcon.setAttribute('src', '');
         date.innerText = '';
         day1temp.innerText = '';
-        day1icon.setAttribute('src', '');
+        day1icon.setAttribute('src', './images/CarterSun.png');
         day2temp.innerText = '';
-        day2icon.setAttribute('src', '');
+        day2icon.setAttribute('src', './images/CarterSun.png');
         day3temp.innerText = '';
-        day3icon.setAttribute('src', '');
+        day3icon.setAttribute('src', './images/CarterSun.png');
         day4temp.innerText = '';
-        day4icon.setAttribute('src', '');
+        day4icon.setAttribute('src', './images/CarterSun.png');
         day5temp.innerText = '';
-        day5icon.setAttribute('src', '');
-    
+        day5icon.setAttribute('src', './images/CarterSun.png');
+
     }
 });
 next.addEventListener('click', nextCity)
@@ -106,7 +108,7 @@ prev.addEventListener('click', prevCity)
 
 //----------------------------------------REPETITVE FUNCTIONS-----------------------------------------------//
 
-function buildURL(){
+function buildURL() {
     let url_pt1 = "http://api.openweathermap.org/data/2.5/weather?q=";
     let url_city_pt2 = user_input.value;
     let url_imperial = "&units=imperial";
@@ -117,18 +119,18 @@ function buildURL(){
     let for_city_pt2 = user_input.value;
     let for_imperial = "&units=imperial";
     let for_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
-    let for_url = for_pt1+for_city_pt2+for_imperial+for_key_pt3;
+    let for_url = for_pt1 + for_city_pt2 + for_imperial + for_key_pt3;
     loadForecast(for_url);
-    user_input.value =''
+    user_input.value = ''
 }
 //-----------PARSEing out the respective city's info for front end/DOM manipulation--------------//
 function getWeather(currentCity) {
     console.log(cityWeather[currentCity]);
     //Dom elements to update and change
     city.innerText = cityWeather[currentCity].name;
-    curTemp.innerText = cityWeather[currentCity].main.temp;
-    low.innerText = 'low ' + cityWeather[currentCity].main.temp_min + '°';
-    high.innerText = 'high ' + cityWeather[currentCity].main.temp_max + '°';
+    curTemp.innerText = Math.round(cityWeather[currentCity].main.temp) + '°';
+    low.innerText = 'low ' + Math.round(cityWeather[currentCity].main.temp_min) + '°';
+    high.innerText = 'high ' + Math.round(cityWeather[currentCity].main.temp_max) + '°';
     description.innerText = cityWeather[currentCity].weather[0].description;
     wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityWeather[currentCity].weather[0].icon + '@2x.png');
     date.innerText = today;
@@ -136,26 +138,26 @@ function getWeather(currentCity) {
     saveData();
 }
 function getForcast(currentCity) {
-    console.log(cityWeather[currentCity]);
+    console.log(cityForcast[currentCity]);
     //Dom elements to update and change
-    day1temp.innerText = 'low ' + cityForcast[currentCity].list[0].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[0].main.temp_max + '°';
+    day1temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[0].main.temp_min) + '° / ' + 'high ' + Math.round(cityForcast[currentCity].list[0].main.temp_max) + '°';
     day1icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[0].weather[0].icon + '@2x.png');
-    day2temp.innerText = 'low ' + cityForcast[currentCity].list[7].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[7].main.temp_max + '°';
+    day2temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[7].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[7].main.temp_max) + '°';
     day2icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[7].weather[0].icon + '@2x.png');
-    day3temp.innerText = 'low ' + cityForcast[currentCity].list[15].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[15].main.temp_max + '°';
+    day3temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[15].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[15].main.temp_max) + '°';
     day3icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[15].weather[0].icon + '@2x.png');
-    day4temp.innerText = 'low ' + cityForcast[currentCity].list[23].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[23].main.temp_max + '°';
+    day4temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[23].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[23].main.temp_max )+ '°';
     day4icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[23].weather[0].icon + '@2x.png');
-    day5temp.innerText = 'low ' + cityForcast[currentCity].list[31].main.temp_min + '°/'+'high ' + cityForcast[currentCity].list[31].main.temp_max + '°';
+    day5temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[31].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[31].main.temp_max) + '°';
     day5icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[31].weather[0].icon + '@2x.png');
     counter = currentCity;
     saveData();
 }
-function saveData(){
+function saveData() {
     localStorage.setItem('savedCities', JSON.stringify(cityWeather));
     localStorage.setItem('savedForcast', JSON.stringify(cityForcast));
 }
-function prevCity(){
+function prevCity() {
     if (cityWeather.length > 0) {
         if (counter > 0) counter--;
         else counter = cityWeather.length - 1;
@@ -163,7 +165,7 @@ function prevCity(){
         getForcast(counter);
     }
 }
-function nextCity(){
+function nextCity() {
     if (cityWeather.length > 0) {
         if (counter < cityWeather.length - 1) counter++;
         else counter = 0;
@@ -171,7 +173,28 @@ function nextCity(){
         getForcast(counter);
     }
 }
-
+function findDup() {
+    user = user_input.value.toUpperCase();
+    if (cityWeather.length > 0) {
+        for (let i = 0; i < cityWeather.length; i++) {
+            check = cityWeather[i].name.toUpperCase();
+            if (dup) {
+                if (check === user) {
+                    alert("in da list");
+                    user_input.value = '';
+                    dup = false;
+                }
+            }
+        }
+        if (dup) {
+            buildURL();
+        }
+        else {
+            dup = true;
+        }
+    }
+    else buildURL();
+}
 
 //----------THIS FUNCTION DOES THE REQEST/SEND AND DOM MANIPULATION ALL IN ONE
 //----------THIS FUNCTION WORKS REALLY WELL WITH ONE SINGLE API URL

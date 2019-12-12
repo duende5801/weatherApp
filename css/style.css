@@ -5,7 +5,7 @@ h1{
     font-size: 50pt;
 }
 body{
-    background-color: darkgrey;
+    background-color: rgb(154, 226, 223);
 }
 .make-prev{
     transform: scale(-1);
