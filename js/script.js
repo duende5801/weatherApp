@@ -23,6 +23,11 @@ let day2icon = document.getElementById('day2icon');
 let day3icon = document.getElementById('day3icon');
 let day4icon = document.getElementById('day4icon');
 let day5icon = document.getElementById('day5icon');
+let date1 = document.getElementById('date1');
+let date2 = document.getElementById('date2');
+let date3 = document.getElementById('date3');
+let date4 = document.getElementById('date4');
+let date5 = document.getElementById('date5');
 let today = new Date().toLocaleDateString()
 
 //--------------global variables-------------------//
@@ -99,7 +104,11 @@ del.addEventListener('click', function (e) {
         day4icon.setAttribute('src', './images/CarterSun.png');
         day5temp.innerText = '';
         day5icon.setAttribute('src', './images/CarterSun.png');
-
+        date1.innerText = '';
+        date2.innerText = '';
+        date3.innerText = '';
+        date4.innerText = '';
+        date5.innerText = '';
     }
 });
 next.addEventListener('click', nextCity)
@@ -128,9 +137,9 @@ function getWeather(currentCity) {
     console.log(cityWeather[currentCity]);
     //Dom elements to update and change
     city.innerText = cityWeather[currentCity].name;
-    curTemp.innerText = Math.round(cityWeather[currentCity].main.temp) + '°';
-    low.innerText = 'low ' + Math.round(cityWeather[currentCity].main.temp_min) + '°';
-    high.innerText = 'high ' + Math.round(cityWeather[currentCity].main.temp_max) + '°';
+    curTemp.innerText = Math.round(cityWeather[currentCity].main.temp) + '°F';
+    low.innerText = 'low ' + Math.round(cityWeather[currentCity].main.temp_min) + '°F';
+    high.innerText = 'high ' + Math.round(cityWeather[currentCity].main.temp_max) + '°F';
     description.innerText = cityWeather[currentCity].weather[0].description;
     wIcon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityWeather[currentCity].weather[0].icon + '@2x.png');
     date.innerText = today;
@@ -140,15 +149,20 @@ function getWeather(currentCity) {
 function getForcast(currentCity) {
     console.log(cityForcast[currentCity]);
     //Dom elements to update and change
-    day1temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[0].main.temp_min) + '° / ' + 'high ' + Math.round(cityForcast[currentCity].list[0].main.temp_max) + '°';
+    date1.innerText = cityForcast[currentCity].list[0].dt_txt[5]+cityForcast[currentCity].list[0].dt_txt[6]+'/'+cityForcast[currentCity].list[0].dt_txt[8]+cityForcast[currentCity].list[0].dt_txt[9];
+    date2.innerText = cityForcast[currentCity].list[11].dt_txt[5]+cityForcast[currentCity].list[11].dt_txt[6]+'/'+cityForcast[currentCity].list[11].dt_txt[8]+cityForcast[currentCity].list[11].dt_txt[9];
+    date3.innerText = cityForcast[currentCity].list[19].dt_txt[5]+cityForcast[currentCity].list[19].dt_txt[6]+'/'+cityForcast[currentCity].list[19].dt_txt[8]+cityForcast[currentCity].list[19].dt_txt[9];
+    date4.innerText = cityForcast[currentCity].list[27].dt_txt[5]+cityForcast[currentCity].list[27].dt_txt[6]+'/'+cityForcast[currentCity].list[27].dt_txt[8]+cityForcast[currentCity].list[27].dt_txt[9];
+    date5.innerText = cityForcast[currentCity].list[35].dt_txt[5]+cityForcast[currentCity].list[35].dt_txt[6]+'/'+cityForcast[currentCity].list[35].dt_txt[8]+cityForcast[currentCity].list[35].dt_txt[9];
+    day1temp.innerText = Math.trunc(cityForcast[currentCity].list[0].main.temp_min) + '°F / ' + Math.trunc(cityForcast[currentCity].list[0].main.temp_max) + '°F';
     day1icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[0].weather[0].icon + '@2x.png');
-    day2temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[7].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[7].main.temp_max) + '°';
+    day2temp.innerText = Math.trunc(cityForcast[currentCity].list[7].main.temp_min) + '°F / ' + Math.trunc(cityForcast[currentCity].list[7].main.temp_max) + '°F';
     day2icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[7].weather[0].icon + '@2x.png');
-    day3temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[15].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[15].main.temp_max) + '°';
+    day3temp.innerText = Math.round(cityForcast[currentCity].list[15].main.temp_min) + '°F / ' + Math.round(cityForcast[currentCity].list[15].main.temp_max) + '°F';
     day3icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[15].weather[0].icon + '@2x.png');
-    day4temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[23].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[23].main.temp_max )+ '°';
+    day4temp.innerText = Math.round(cityForcast[currentCity].list[23].main.temp_min) + '°F / ' + Math.round(cityForcast[currentCity].list[23].main.temp_max )+ '°F';
     day4icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[23].weather[0].icon + '@2x.png');
-    day5temp.innerText = 'low ' + Math.round(cityForcast[currentCity].list[31].main.temp_min) + '°/' + 'high ' + Math.round(cityForcast[currentCity].list[31].main.temp_max) + '°';
+    day5temp.innerText = Math.round(cityForcast[currentCity].list[31].main.temp_min) + '°F / ' + Math.round(cityForcast[currentCity].list[31].main.temp_max) + '°F';
     day5icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[31].weather[0].icon + '@2x.png');
     counter = currentCity;
     saveData();
@@ -196,6 +210,15 @@ function findDup() {
     else buildURL();
 }
 
+////----------------functions that break the code------------//////
+/* function formDate(dayPosition) {
+    let fullDate = cityForcast[currentCity].list[dayPosition].dt_txt
+    let newDate = "";
+
+    newDate = fullDate[5]+fullDate[6]+ ' / '+ fullDate[8]+fullDate[9];
+    return newDate;
+}
+ */
 //----------THIS FUNCTION DOES THE REQEST/SEND AND DOM MANIPULATION ALL IN ONE
 //----------THIS FUNCTION WORKS REALLY WELL WITH ONE SINGLE API URL
 //----------WOULD BE USEFUL IF IN THE APP, WE USED GEOLOCATER AND
