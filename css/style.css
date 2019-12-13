@@ -2,7 +2,7 @@ h1{
     background-color: #E1F25F;
     color: #96008B;
     font-family: Helvetica, sans-serif;
-    font-size: 50pt;
+    font-size: 36pt;
 }
 body{
     background-color: rgb(154, 226, 223);
@@ -11,7 +11,7 @@ body{
     transform: scale(-1);
 }
 .icon-height{
-    width: 280px;
+    width: 100px;
 }
 a{
     color: darkgrey;
@@ -28,4 +28,12 @@ a{
 }
 .arrow2:hover{
     transform: scale(-2);
+}
+#current-temp{
+    font-size: x-large;
+    font-weight: 400;
+}
+.card-img-top{
+    transform: scale(.7);
+    height: 80px;
 }

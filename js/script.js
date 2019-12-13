@@ -1,5 +1,12 @@
-//---------------grab dom elements--------------------//
+//--------------global variables-------------------//
+let cityWeather = [];
+let cityForcast = [];
+let counter = 0;
+let check;
+let user;
+let dup = true;
 
+//---------------grab dom elements--------------------//
 //city, current-temp, low, high, description, date, delete, user-input, add
 let city = document.getElementById('city');
 let curTemp = document.getElementById('current-temp');
@@ -30,19 +37,25 @@ let date4 = document.getElementById('date4');
 let date5 = document.getElementById('date5');
 let today = new Date().toLocaleDateString()
 
-//--------------global variables-------------------//
-let cityWeather = [];
-let cityForcast = [];
-let counter = 0;
-let check;
-let user;
-let dup = true;
-
 //-------------on load---------------------------//
 if (localStorage.getItem('savedCities')) {
     cityWeather = JSON.parse(localStorage.getItem('savedCities'));
     cityForcast = JSON.parse(localStorage.getItem('savedForcast'));
 }
+navigator.geolocation.getCurrentPosition(success, error);
+function success(pos){
+    console.log(pos.coords.longitude + ' ' + pos.coords.latitude)
+    let lat = pos.coords.latitude;
+    let long = pos.coords.longitude;
+    let posURL = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+'&lon='+long+"&units=imperial"+"&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
+    let forposURL = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+'&lon='+long+"&units=imperial"+"&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
+    loadWeather(posURL);
+    loadForecast(forposURL);
+}
+function error(){
+    alert('can\'t find current location');
+}
+
 
 //------------------------------Load Your JSON Weather File--------------------------//
 function loadWeather(URL) {
@@ -119,16 +132,14 @@ prev.addEventListener('click', prevCity)
 
 function buildURL() {
     let url_pt1 = "http://api.openweathermap.org/data/2.5/weather?q=";
+    //let url_pt_loc = 
     let url_city_pt2 = user_input.value;
     let url_imperial = "&units=imperial";
     let url_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
     let api_url = url_pt1 + url_city_pt2 + url_imperial + url_key_pt3;
     loadWeather(api_url);
     let for_pt1 = "http://api.openweathermap.org/data/2.5/forecast?q=";
-    let for_city_pt2 = user_input.value;
-    let for_imperial = "&units=imperial";
-    let for_key_pt3 = "&APPID=0e1ec07efa4a5a082c2cf3d4f8ff7764";
-    let for_url = for_pt1 + for_city_pt2 + for_imperial + for_key_pt3;
+    let for_url = for_pt1 +url_city_pt2 + url_imperial + url_key_pt3;
     loadForecast(for_url);
     user_input.value = ''
 }
@@ -218,6 +229,7 @@ function findDup() {
     newDate = fullDate[5]+fullDate[6]+ ' / '+ fullDate[8]+fullDate[9];
     return newDate;
 }
+
  */
 //----------THIS FUNCTION DOES THE REQEST/SEND AND DOM MANIPULATION ALL IN ONE
 //----------THIS FUNCTION WORKS REALLY WELL WITH ONE SINGLE API URL
