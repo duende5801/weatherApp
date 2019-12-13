@@ -1,6 +1,8 @@
 //--------------global variables-------------------//
 let cityWeather = [];
 let cityForcast = [];
+let geoCurrent =[];
+let geoFor =[];
 let counter = 0;
 let check;
 let user;
@@ -84,6 +86,30 @@ function loadForecast(URL) {
     xmlhttp.open("GET", URL, true);
     xmlhttp.send();
 }
+function loadGeolocationcurrent(URL) {
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let myArr = JSON.parse(this.responseText);
+            geoCurrent.push(myArr);
+            findDup(getForcast(geoCurrent.indexOf(myArr)));
+        }
+    };
+    xmlhttp.open("GET", URL, true);
+    xmlhttp.send();
+}
+function loadGeolocationcurrentForecast(URL) {
+    let xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            let myArr = JSON.parse(this.responseText);
+            geoFor.push(myArr);
+            findDup(getForcast(geoFor.indexOf(myArr)));
+        }
+    };
+    xmlhttp.open("GET", URL, true);
+    xmlhttp.send();
+}
 
 //-----------------Add event listeners-------------------//
 add.addEventListener('click', findDup);
@@ -161,10 +187,10 @@ function getForcast(currentCity) {
     console.log(cityForcast[currentCity]);
     //Dom elements to update and change
     date1.innerText = cityForcast[currentCity].list[0].dt_txt[5]+cityForcast[currentCity].list[0].dt_txt[6]+'/'+cityForcast[currentCity].list[0].dt_txt[8]+cityForcast[currentCity].list[0].dt_txt[9];
-    date2.innerText = cityForcast[currentCity].list[11].dt_txt[5]+cityForcast[currentCity].list[11].dt_txt[6]+'/'+cityForcast[currentCity].list[11].dt_txt[8]+cityForcast[currentCity].list[11].dt_txt[9];
-    date3.innerText = cityForcast[currentCity].list[19].dt_txt[5]+cityForcast[currentCity].list[19].dt_txt[6]+'/'+cityForcast[currentCity].list[19].dt_txt[8]+cityForcast[currentCity].list[19].dt_txt[9];
-    date4.innerText = cityForcast[currentCity].list[27].dt_txt[5]+cityForcast[currentCity].list[27].dt_txt[6]+'/'+cityForcast[currentCity].list[27].dt_txt[8]+cityForcast[currentCity].list[27].dt_txt[9];
-    date5.innerText = cityForcast[currentCity].list[35].dt_txt[5]+cityForcast[currentCity].list[35].dt_txt[6]+'/'+cityForcast[currentCity].list[35].dt_txt[8]+cityForcast[currentCity].list[35].dt_txt[9];
+    date2.innerText = cityForcast[currentCity].list[7].dt_txt[5]+cityForcast[currentCity].list[7].dt_txt[6]+'/'+cityForcast[currentCity].list[7].dt_txt[8]+cityForcast[currentCity].list[7].dt_txt[9];
+    date3.innerText = cityForcast[currentCity].list[15].dt_txt[5]+cityForcast[currentCity].list[15].dt_txt[6]+'/'+cityForcast[currentCity].list[15].dt_txt[8]+cityForcast[currentCity].list[15].dt_txt[9];
+    date4.innerText = cityForcast[currentCity].list[23].dt_txt[5]+cityForcast[currentCity].list[23].dt_txt[6]+'/'+cityForcast[currentCity].list[23].dt_txt[8]+cityForcast[currentCity].list[23].dt_txt[9];
+    date5.innerText = cityForcast[currentCity].list[31].dt_txt[5]+cityForcast[currentCity].list[31].dt_txt[6]+'/'+cityForcast[currentCity].list[31].dt_txt[8]+cityForcast[currentCity].list[31].dt_txt[9];
     day1temp.innerText = Math.trunc(cityForcast[currentCity].list[0].main.temp_min) + '°F / ' + Math.trunc(cityForcast[currentCity].list[0].main.temp_max) + '°F';
     day1icon.setAttribute('src', 'http://openweathermap.org/img/wn/' + cityForcast[currentCity].list[0].weather[0].icon + '@2x.png');
     day2temp.innerText = Math.trunc(cityForcast[currentCity].list[7].main.temp_min) + '°F / ' + Math.trunc(cityForcast[currentCity].list[7].main.temp_max) + '°F';

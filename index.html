@@ -18,23 +18,23 @@
 <body>
   <div class="container">
     <h1 class="d-flex justify-content-center">Weather API Basics</h1>
-    <div class="row">
-      <div class="col-3"></div>
-      <div class="col">
-        <button id="delete" type="button" class="btn btn-danger">Delete city</button>
+    <div class="row py-2">
+      <div class="col-3 order-1"></div>
+      <div class="col-xl-2 col-lg-2 col-12 order-xl-2 order-lg-2 order-9 d-flex justify-content-center py-2">
+        <button id="delete" type="button" class="btn btn-danger btn-block">Delete city</button>
       </div>
-      <div class="col">
+      <div class="col-xl-2 col-lg-2 col-12 order-xl-3 order-lg-3 order-8 d-flex justify-content-center py-2">
         <div class="input-group">
           <input id="user-input" type="text" class="form-control" placeholder="City/Zip Code" aria-label="City"
             aria-describedby="button-addon2">
-          <div class="input-group-append">
-            <button id="add" class="btn btn-success" type="button" id="button-addon2">Add City</button>
-          </div>
         </div>
       </div>
-      <div class="col-3"></div>
+      <div class="col-xl-2 col-lg-2 col-12 order-xl-4 order-lg-4 order-7 d-flex justify-content-center py-2">
+          <button id="add" class="btn btn-success btn-block" type="button">Add City</button>
+      </div>
+      <div class="col-3 order-10"></div>
     </div>
-    <div class="row">
+    <div class="row py-3">
       <div class="col d-flex justify-content-center">
         <h3 id="city" class="CityName"></h3>
       </div>
@@ -73,10 +73,11 @@
       </div>
       <div class="col-3"></div>
     </div>
+    <hr>
     <div class="row">
       <div class="col-1"></div>
       <div class="col-2">
-        <div class="card">
+        <div class="card card-color">
           <img id="day1icon" src="./images/CarterSun.png" class="card-img-top">
           <div class="card-body">
             <p id="date1" class="card-text d-flex justify-content-center"></p>
@@ -85,7 +86,7 @@
         </div>
       </div>
       <div class="col-2">
-        <div class="card">
+        <div class="card card-color">
           <img id="day2icon" src="./images/CarterSun.png" class="card-img-top">
           <div class="card-body">
             <p id="date2" class="card-text d-flex justify-content-center"></p>
@@ -94,7 +95,7 @@
         </div>
       </div>
       <div class="col-2">
-        <div class="card">
+        <div class="card card-color">
           <img id="day3icon" src="./images/CarterSun.png" class="card-img-top">
           <div class="card-body">
             <p id="date3" class="card-text d-flex justify-content-center"></p>
@@ -103,7 +104,7 @@
         </div>
       </div>
       <div class="col-2">
-        <div class="card">
+        <div class="card card-color">
           <img id="day4icon" src="./images/CarterSun.png" class="card-img-top">
           <div class="card-body">
             <p id="date4" class="card-text d-flex justify-content-center"></p>
@@ -112,7 +113,7 @@
         </div>
       </div>
       <div class="col-2">
-        <div class="card">
+        <div class="card card-color">
           <img id="day5icon" src="./images/CarterSun.png" class="card-img-top">
           <div class="card-body">
             <p id="date5" class="card-text d-flex justify-content-center"></p>
@@ -122,7 +123,7 @@
       </div>
       <div class="col-1"></div>
     </div>
-
+    <hr>
   </div>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

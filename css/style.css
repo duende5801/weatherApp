@@ -34,6 +34,10 @@ a{
     font-weight: 400;
 }
 .card-img-top{
-    transform: scale(.7);
-    height: 80px;
+    transform: scale(.8);
+    height: 90px;
+}
+.card-color{
+    background-color: rgba(250, 235, 215, 0);
+    border-width: 0;
 }
